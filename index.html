@@ -2,1019 +2,221 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de Medição</title>
-    <meta name="description" content="Sistema de Relatório de Medição - Desenvolvedor Claudinho CSMM">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sistema de Bota Fora - M.A VIANA LOCAÇÕES</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Sistema de controle de Bota Fora com exportação de relatórios em PDF">
+    <meta name="theme-color" content="#007bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bota Fora">
+    <meta name="msapplication-TileColor" content="#007bff">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/gerar_icone_mv.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/gerar_icone_mv.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/gerar_icone_mv.png">
+    
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/jpeg" href="unnamed.jpg">
-    <link rel="apple-touch-icon" href="unnamed.jpg">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f1f5f9;
-            color: #1e293b;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-
-        .header {
-            padding: 24px;
-            border-bottom: 1px solid #f1f5f9;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        @media (min-width: 768px) {
-            .header {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: #2563eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 32px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            border: 4px solid #dbeafe;
-            overflow: hidden;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-        }
-
-        .header-title h1 {
-            font-size: 24px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #334155;
-            letter-spacing: -0.5px;
-        }
-
-        .header-title p {
-            color: #94a3b8;
-            font-size: 14px;
-            font-style: italic;
-        }
-
-        .period-input {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            width: 100%;
-        }
-
-        @media (min-width: 768px) {
-            .period-input {
-                width: auto;
-                align-items: flex-end;
-            }
-        }
-
-        .period-input label {
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .period-input input {
-            padding: 8px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-            width: 100%;
-            background: #f8fafc;
-            transition: all 0.2s;
-        }
-
-        @media (min-width: 768px) {
-            .period-input input {
-                width: 192px;
-            }
-        }
-
-        .period-input input:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-        }
-
-        .actions-section {
-            padding: 16px;
-            background: #f8fafc;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .actions-section p {
-            font-size: 12px;
-            font-weight: bold;
-            color: #94a3b8;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        @media (min-width: 768px) {
-            .actions-section p {
-                text-align: left;
-            }
-        }
-
-        .service-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        @media (min-width: 768px) {
-            .service-buttons {
-                justify-content: flex-start;
-            }
-        }
-
-        .service-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 9999px;
-            font-size: 14px;
-            font-weight: 500;
-            border: 1px solid #e2e8f0;
-            background: white;
-            color: #475569;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .service-btn:hover {
-            border-color: #60a5fa;
-            color: #2563eb;
-        }
-
-        .service-btn.adding {
-            background: #22c55e;
-            color: white;
-            border-color: #22c55e;
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(34, 197, 94, 0.3);
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        thead tr {
-            background: #1e293b;
-            color: white;
-        }
-
-        thead th {
-            padding: 16px 24px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-align: center;
-        }
-
-        thead th:first-child {
-            text-align: left;
-        }
-
-        tbody tr {
-            border-bottom: 1px solid #f1f5f9;
-            transition: background-color 0.2s;
-        }
-
-        tbody tr:hover {
-            background: rgba(59, 130, 246, 0.05);
-        }
-
-        tbody td {
-            padding: 16px 24px;
-            text-align: center;
-        }
-
-        tbody td:first-child {
-            text-align: left;
-        }
-
-        tbody input {
-            width: 100%;
-            max-width: 200px;
-            padding: 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            font-size: 14px;
-            text-align: center;
-            background: white;
-            transition: all 0.2s;
-        }
-
-        tbody input:focus {
-            outline: none;
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
-
-        tbody input[type="text"] {
-            text-align: left;
-            max-width: 100%;
-            font-weight: 500;
-            color: #334155;
-            border: none;
-            background: transparent;
-        }
-
-        tbody input[type="text"]:focus {
-            color: #2563eb;
-        }
-
-        tbody select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            font-size: 14px;
-            background: white;
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        tbody select:focus {
-            outline: none;
-            border-color: #60a5fa;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
-        }
-
-        tbody select:hover {
-            border-color: #60a5fa;
-        }
-
-        .valor-input-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-        }
-
-        .valor-input-wrapper span {
-            font-size: 12px;
-            font-weight: bold;
-            color: #94a3b8;
-        }
-
-        .valor-total {
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-
-        .valor-total.has-value {
-            color: #1e40af;
-        }
-
-        .valor-total.no-value {
-            color: #cbd5e1;
-        }
-
-        .remove-btn {
-            padding: 8px;
-            background: none;
-            border: none;
-            color: #cbd5e1;
-            cursor: pointer;
-            transition: color 0.2s;
-            font-size: 18px;
-        }
-
-        .remove-btn:hover {
-            color: #ef4444;
-        }
-
-        tfoot tr {
-            background: #2563eb;
-            color: white;
-        }
-
-        tfoot td {
-            padding: 20px 24px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        tfoot td:first-child {
-            text-align: right;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        tfoot td:nth-child(2) {
-            font-size: 24px;
-            font-weight: 900;
-        }
-
-        .empty-message {
-            padding: 48px;
-            text-align: center;
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        .observation-section {
-            padding: 24px;
-            background: white;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        .observation-section h3 {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #475569;
-            margin-bottom: 12px;
-        }
-
-        .observation-section textarea {
-            width: 100%;
-            min-height: 96px;
-            padding: 16px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
-            color: #475569;
-            resize: vertical;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .observation-section textarea:focus {
-            outline: none;
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
-        }
-
-        .footer-actions {
-            padding: 16px 24px;
-            background: #f1f5f9;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .btn {
-            padding: 8px 24px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            font-size: 14px;
-        }
-
-        .btn-clear {
-            background: white;
-            color: #64748b;
-        }
-
-        .btn-clear:hover {
-            background: #e2e8f0;
-        }
-
-        .btn-generate {
-            background: #1e293b;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-generate:hover {
-            background: #0f172a;
-        }
-
-        .btn-generate:active {
-            transform: translateY(1px);
-        }
-
-        .footer-info {
-            margin-top: 32px;
-            text-align: center;
-            color: #94a3b8;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .footer-info .developer {
-            font-weight: bold;
-            color: #64748b;
-        }
-
-        .metragem-disabled {
-            background: #f1f5f9 !important;
-            color: #94a3b8 !important;
-            cursor: not-allowed;
-        }
-    </style>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css?v=4.0">
+    
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- Cabeçalho do Sistema -->
         <div class="header">
-            <div class="header-left">
-                <div class="logo">
-                    <img src="unnamed.jpg" alt="Logo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+            <div class="sistema-titulo">
+                <div class="logo-titulo">
+                    <div class="logo-lateral-titulo" id="logo-lateral" style="width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin: 0 auto 15px;">
+                        <img src="images/gerar_icone_mv.png" alt="Logo MV" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="80" height="80" style="display: none;">
+                            <circle cx="32" cy="32" r="30" fill="#007bff" stroke="#0056b3" stroke-width="2"/>
+                            <g fill="white">
+                                <rect x="12" y="40" width="40" height="3" rx="1.5"/>
+                                <circle cx="16" cy="42" r="2"/>
+                                <circle cx="24" cy="38" r="2"/>
+                                <circle cx="32" cy="35" r="2"/>
+                                <circle cx="40" cy="32" r="2"/>
+                                <circle cx="48" cy="30" r="2"/>
+                                <path d="M16,42 L24,38 L32,35 L40,32 L48,30" stroke="white" stroke-width="2" fill="none"/>
+                                <path d="M20,20 L20,45 L24,45 L24,28 L28,35 L32,28 L36,35 L40,28 L40,45 L44,45 L44,20 L38,20 L32,30 L26,20 Z" fill="white"/>
+                            </g>
+                        </svg>
+                    </div>
                 </div>
-                <div class="header-title">
-                    <h1>Relatório de Medição</h1>
-                    <p>Desenvolvedor Claudinho CSMM</p>
+                <div class="titulo-com-logo">
+                    <h1><i class="fas fa-shipping-fast"></i> BOTA FORA</h1>
+                </div>
+                <h2>M.A VIANA LOCAÇÕES E SERVIÇOS - ME</h2>
+            </div>
+            <div class="header-actions">
+                <button id="toggle-dark-mode" class="btn-dark-mode" title="Alternar modo noturno">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Informações da Empresa -->
+        <div class="empresa-info">
+            <div class="info-row">
+                <div class="info-item">
+                    <label><i class="fas fa-building"></i> <strong>CNPJ:</strong></label>
+                    <input type="text" id="cnpj-empresa" value="14.251.442/0001-15" class="campo-editavel" data-validate="cnpj" placeholder="XX.XXX.XXX/XXXX-XX">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-industry"></i> <strong>NOME DA EMPRESA:</strong></label>
+                    <input type="text" id="nome-empresa" value="M.A VIANA LOCAÇÕES E SERVIÇOS - ME" class="campo-editavel">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-map-marker-alt"></i> <strong>ENDERECO OBRA:</strong></label>
+                    <input type="text" id="endereco-obra" value="" class="campo-editavel" placeholder="Digite o endereço da obra">
                 </div>
             </div>
-            <div class="period-input">
-                <label>📅 Período</label>
-                <input type="text" id="period" placeholder="Ex: Maio/2024">
+            <div class="info-row">
+                <div class="info-item">
+                    <label><i class="fas fa-road"></i> <strong>Rua:</strong></label>
+                    <input type="text" id="rua-empresa" value="Rua Desembargador Auro Cerqueira Leite, 36" class="campo-editavel">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-city"></i> <strong>Cidade:</strong></label>
+                    <input type="text" id="cidade-empresa" value="Cidade Kemel - São Paulo, SP" class="campo-editavel">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-mail-bulk"></i> <strong>CEP:</strong></label>
+                    <input type="text" id="cep-empresa" value="08130-410" class="campo-editavel">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Informações do Cliente -->
+        <div class="cliente-info">
+            <div class="info-row">
+                <div class="info-item">
+                    <label><i class="fas fa-id-card"></i> <strong>CNPJ CLIENTE:</strong></label>
+                    <input type="text" id="cnpj-cliente" class="campo-editavel" placeholder="XX.XXX.XXX/XXXX-XX" data-validate="cnpj">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-building"></i> <strong>NOME DO CONTRATO/EMPRESA:</strong></label>
+                    <input type="text" id="nome-contrato" class="campo-editavel" placeholder="Ex: Cons Vila Romana" value="Cons Vila Romana">
+                </div>
             </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="actions-section">
-            <p>Clique para Adicionar Serviço:</p>
-            <div class="service-buttons" id="serviceButtons"></div>
+        <!-- Informações de Bota Fora -->
+        <div class="clearance-info">
+            <h3 class="section-title"><i class="fas fa-shipping-fast"></i> Bota Fora</h3>
+            <div class="clearance-controls">
+                <button id="adicionar-clearance" class="btn-futurista" style="margin-bottom: 15px;">
+                    <i class="fas fa-plus"></i> Adicionar Data e Quantidade
+                </button>
+            </div>
+            <div id="tabela-clearance-container" class="tabela-clearance-container">
+                <table class="tabela-clearance">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Qtd. Viagens</th>
+                            <th>Valor por Viagem</th>
+                            <th>Observação</th>
+                            <th>Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-clearance-body">
+                        <!-- Linhas serão adicionadas dinamicamente -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong>Total Viagens</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong id="total-quantidade-clearance">R$ 0,00</strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
 
-        <!-- Table -->
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tipo de Serviço</th>
-                        <th>Tipo de Material</th>
-                        <th>Diâmetro (mm)</th>
-                        <th>Metragem (m)</th>
-                        <th>Profundidade (m)</th>
-                        <th id="valorColumnHeader">Valor por Metro</th>
-                        <th>Valor Total</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="8" class="empty-message">
-                            Nenhum serviço na lista. Selecione um serviço acima para calcular.
-                        </td>
-                    </tr>
-                </tbody>
-                <tfoot id="tableFooter" style="display: none;">
-                    <tr>
-                        <td colspan="6">💰 Valor Total da Medição:</td>
-                        <td id="totalGeral">R$ 0,00</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
+        <!-- Botões de Controle -->
+        <div class="botoes-controle">
+            <div class="botoes-grupo">
+                <button id="exportar-pdf-bota-fora" class="btn-futurista">
+                    <i class="fas fa-file-pdf"></i> 📄 Exportar PDF Bota Fora
+                </button>
+                <button id="limpar-bota-fora" class="btn-secundario">
+                    <i class="fas fa-trash"></i> 🗑️ Limpar Dados
+                </button>
+            </div>
         </div>
 
-        <!-- Observation Section -->
-        <div class="observation-section">
-            <h3>ℹ️ Observação do Relatório</h3>
-            <textarea id="observation" placeholder="Ex: Condições climáticas, materiais extras, etc..."></textarea>
+        <!-- Resumo Final -->
+        <div class="resumo-final">
+            <div class="resumo-item">
+                <h4><i class="fas fa-chart-bar"></i> RESUMO</h4>
+                <p><strong>Total de Registros:</strong> <span id="total-registros">0</span></p>
+                <p><strong>Total de Viagens:</strong> <span id="total-viagens-resumo">0</span></p>
+                <p><strong>Total em Valores:</strong> <span id="total-quantidade-resumo">R$ 0,00</span></p>
+            </div>
         </div>
 
-        <!-- Footer Actions -->
-        <div class="footer-actions">
-            <button class="btn btn-clear" onclick="clearAll()">Limpar Dados</button>
-            <button class="btn btn-generate" onclick="generatePDF()">
-                ⬇️ Finalizar Medição (PDF)
-            </button>
+        <!-- Observação -->
+        <div class="observacao-section">
+            <h4><i class="fas fa-comment-alt"></i> Observação</h4>
+            <textarea id="observacao" class="campo-editavel" rows="3" placeholder="Digite observações adicionais aqui..."></textarea>
+        </div>
+
+        <!-- Rodapé -->
+        <div class="rodape">
+            <p><i class="fas fa-map-marker-alt"></i> SÃO PAULO, <span id="data-footer"></span> / 2025</p>
+            <p class="sistema-info">Sistema de Bota Fora - M.A VIANA LOCAÇÕES E SERVIÇOS - ME</p>
+            <p class="versao">Versão 1.0 - Sistema Profissional e Funcional</p>
         </div>
     </div>
 
-    <div class="footer-info">
-        <span>Cálculos processados em tempo real.</span>
-        <span class="developer">Desenvolvedor Claudinho CSMM</span>
-    </div>
-
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="config.js"></script>
+    <script src="bota-fora.js?v=1.0"></script>
+    
+    <!-- Service Worker Registration -->
     <script>
-        const serviceTypes = [
-            { id: 'pa', name: 'Prolongamento de água', icon: '💧' },
-            { id: 'pe', name: 'Prolongamento de esgoto', icon: '💧' },
-            { id: 'ra', name: 'Remanejamento de água', icon: '👷' },
-            { id: 're', name: 'Remanejamento de esgoto', icon: '👷' },
-            { id: 'pv', name: 'Construção de PV', icon: '🏗️' },
-            { id: 'ipi', name: 'Construção de IPI', icon: '🏗️' },
-        ];
-
-        let rows = [];
-        let isAdding = null;
-
-        // Função para verificar se é serviço por instalação (PV ou IPI)
-        function isPorInstalacao(tipo) {
-            return tipo.includes('PV') || tipo.includes('IPI');
-        }
-
-        // Função para verificar se é serviço de água
-        function isAgua(tipo) {
-            return tipo.toLowerCase().includes('água') || tipo.toLowerCase().includes('agua');
-        }
-
-        // Função para verificar se é serviço de esgoto
-        function isEsgoto(tipo) {
-            return tipo.toLowerCase().includes('esgoto');
-        }
-
-        // Obter opções de material baseado no tipo de serviço
-        function getMaterialOptions(tipo) {
-            if (isAgua(tipo)) {
-                return ['PVC', 'PVCO', 'FERRO', 'PAD'];
-            } else if (isEsgoto(tipo)) {
-                return ['PVC', 'FERRO', 'PAD'];
-            }
-            return ['PVC', 'PVCO', 'FERRO', 'PAD']; // Padrão
-        }
-
-        // Obter opções de diâmetro baseado no tipo de serviço
-        function getDiametroOptions(tipo) {
-            if (isAgua(tipo)) {
-                // Diâmetros de 50 a 250
-                const opcoes = [];
-                for (let i = 50; i <= 250; i += 25) {
-                    opcoes.push(i);
-                }
-                return opcoes;
-            } else if (isEsgoto(tipo)) {
-                // Diâmetros de 150 a 400
-                const opcoes = [];
-                for (let i = 150; i <= 400; i += 50) {
-                    opcoes.push(i);
-                }
-                return opcoes;
-            }
-            // Padrão: água
-            const opcoes = [];
-            for (let i = 50; i <= 250; i += 25) {
-                opcoes.push(i);
-            }
-            return opcoes;
-        }
-
-        // Inicializar botões de serviço
-        function initServiceButtons() {
-            const container = document.getElementById('serviceButtons');
-            container.innerHTML = '';
-            
-            serviceTypes.forEach(service => {
-                const btn = document.createElement('button');
-                btn.className = 'service-btn';
-                btn.innerHTML = `${service.icon} ${service.name}`;
-                btn.onclick = () => addService(service.name);
-                container.appendChild(btn);
-            });
-        }
-
-        // Adicionar serviço
-        function addService(serviceName) {
-            const btn = document.querySelector(`.service-btn`);
-            if (btn) {
-                btn.classList.add('adding');
-                setTimeout(() => btn.classList.remove('adding'), 500);
-            }
-
-            const newRow = {
-                id: Date.now(),
-                tipo: serviceName,
-                tipoMaterial: '',
-                diametro: '',
-                metragem: '',
-                profundidade: '',
-                valorMetro: '',
-                valorTotal: '0,00'
-            };
-
-            rows.push(newRow);
-            renderTable();
-        }
-
-        // Atualizar linha
-        function updateRow(id, field, value) {
-            rows = rows.map(row => {
-                if (row.id === id) {
-                    const updatedRow = { ...row, [field]: value };
-                    
-                    // Se o tipo de serviço mudou, limpar tipoMaterial e diametro para forçar nova seleção
-                    if (field === 'tipo') {
-                        updatedRow.tipoMaterial = '';
-                        updatedRow.diametro = '';
-                    }
-                    
-                    // Calcular valor total
-                    const porInstalacao = isPorInstalacao(updatedRow.tipo);
-                    const v = parseFloat(updatedRow.valorMetro.replace(',', '.')) || 0;
-                    
-                    if (porInstalacao) {
-                        // Para PV e IPI: valor fixo por instalação (não multiplica por metragem)
-                        updatedRow.valorTotal = v.toFixed(2).replace('.', ',');
-                    } else {
-                        // Para outros serviços: metragem * valor por metro
-                        const m = parseFloat(updatedRow.metragem.replace(',', '.')) || 0;
-                        updatedRow.valorTotal = (m * v).toFixed(2).replace('.', ',');
-                    }
-                    
-                    return updatedRow;
-                }
-                return row;
-            });
-            
-            renderTable();
-            updateColumnHeader(id);
-        }
-
-        // Atualizar cabeçalho da coluna de valor
-        function updateColumnHeader(rowId) {
-            const row = rows.find(r => r.id === rowId);
-            const header = document.getElementById('valorColumnHeader');
-            
-            if (row && isPorInstalacao(row.tipo)) {
-                header.textContent = 'Valor por Instalação';
-            } else {
-                header.textContent = 'Valor por Metro';
-            }
-        }
-
-        // Remover linha
-        function removeRow(id) {
-            rows = rows.filter(row => row.id !== id);
-            renderTable();
-        }
-
-        // Renderizar tabela
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            const footer = document.getElementById('tableFooter');
-            
-            if (rows.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="empty-message">
-                            Nenhum serviço na lista. Selecione um serviço acima para calcular.
-                        </td>
-                    </tr>
-                `;
-                footer.style.display = 'none';
-                return;
-            }
-
-            footer.style.display = '';
-            
-            tbody.innerHTML = rows.map(row => {
-                const porInstalacao = isPorInstalacao(row.tipo);
-                const valorLabel = porInstalacao ? 'Valor por Instalação' : 'Valor por Metro';
-                const materialOptions = getMaterialOptions(row.tipo);
-                const diametroOptions = getDiametroOptions(row.tipo);
-                
-                const materialSelect = `
-                    <select onchange="updateRow(${row.id}, 'tipoMaterial', this.value)" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 14px;">
-                        <option value="">Selecione</option>
-                        ${materialOptions.map(opt => `<option value="${opt}" ${row.tipoMaterial === opt ? 'selected' : ''}>${opt}</option>`).join('')}
-                    </select>
-                `;
-                
-                const diametroSelect = `
-                    <select onchange="updateRow(${row.id}, 'diametro', this.value)" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 14px;">
-                        <option value="">Selecione</option>
-                        ${diametroOptions.map(opt => `<option value="${opt}" ${String(row.diametro) === String(opt) ? 'selected' : ''}>${opt} mm</option>`).join('')}
-                    </select>
-                `;
-                
-                return `
-                    <tr>
-                        <td>
-                            <input type="text" 
-                                   value="${row.tipo}" 
-                                   onchange="updateRow(${row.id}, 'tipo', this.value)"
-                                   style="width: 100%;">
-                        </td>
-                        <td>
-                            ${materialSelect}
-                        </td>
-                        <td>
-                            ${diametroSelect}
-                        </td>
-                        <td>
-                            <input type="number" 
-                                   step="0.01"
-                                   placeholder="0,00" 
-                                   value="${row.metragem}"
-                                   ${porInstalacao ? 'class="metragem-disabled" readonly' : ''}
-                                   onchange="updateRow(${row.id}, 'metragem', this.value)">
-                        </td>
-                        <td>
-                            <input type="number" 
-                                   step="0.01"
-                                   placeholder="0,00" 
-                                   value="${row.profundidade}"
-                                   onchange="updateRow(${row.id}, 'profundidade', this.value)">
-                        </td>
-                        <td>
-                            <div class="valor-input-wrapper">
-                                <span>R$</span>
-                                <input type="number" 
-                                       step="0.01"
-                                       placeholder="0,00" 
-                                       value="${row.valorMetro}"
-                                       onchange="updateRow(${row.id}, 'valorMetro', this.value)">
-                            </div>
-                        </td>
-                        <td>
-                            <span class="valor-total ${parseFloat(row.valorTotal.replace(',', '.')) > 0 ? 'has-value' : 'no-value'}">
-                                R$ ${row.valorTotal}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="remove-btn" onclick="removeRow(${row.id})" title="Remover linha">
-                                🗑️
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            // Atualizar total geral
-            const totalGeral = rows.reduce((acc, row) => {
-                return acc + parseFloat(row.valorTotal.replace(',', '.')) || 0;
-            }, 0);
-            
-            document.getElementById('totalGeral').textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-        }
-
-        // Limpar tudo
-        function clearAll() {
-            if (confirm("Deseja realmente limpar tudo?")) {
-                rows = [];
-                document.getElementById('observation').value = '';
-                document.getElementById('period').value = '';
-                renderTable();
-            }
-        }
-
-        // Gerar PDF
-        function generatePDF() {
-            if (rows.length === 0) {
-                alert("Adicione pelo menos um serviço para gerar o PDF.");
-                return;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const period = document.getElementById('period').value || 'Não informado';
-            const observation = document.getElementById('observation').value;
-
-            // Função para gerar o conteúdo do PDF
-            function generatePDFContent(doc, logoAdded) {
-                // Cabeçalho
-                let headerX = 15;
-                if (logoAdded) {
-                    headerX = 35;
-                } else {
-                    // Se não tem logo, desenhar um retângulo azul como antes
-                    doc.setFillColor(37, 99, 235);
-                    doc.rect(15, 15, 10, 10, 'F');
-                }
-
-                doc.setFontSize(18);
-                doc.setTextColor(40, 40, 40);
-                doc.text("RELATÓRIO DE MEDIÇÃO", headerX, 22);
-
-                doc.setFontSize(10);
-                doc.setTextColor(100, 100, 100);
-                doc.text(`Período: ${period}`, headerX, 28);
-                doc.text(`Data de Emissão: ${new Date().toLocaleDateString('pt-BR')}`, 150, 22);
-
-                // Tabela
-                const tableColumn = ["Tipo de Serviço", "Material", "Diâmetro", "Metragem (m)", "Profundidade (m)", "Valor", "Total"];
-                const tableRows = rows.map(row => {
-                    const porInstalacao = isPorInstalacao(row.tipo);
-                    return [
-                        row.tipo,
-                        row.tipoMaterial || '-',
-                        row.diametro ? `${row.diametro} mm` : '-',
-                        porInstalacao ? '-' : row.metragem || '0,00',
-                        row.profundidade || '0,00',
-                        `R$ ${row.valorMetro || '0,00'}`,
-                        `R$ ${row.valorTotal}`
-                    ];
-                });
-
-                const totalGeral = rows.reduce((acc, row) => {
-                    return acc + parseFloat(row.valorTotal.replace(',', '.')) || 0;
-                }, 0);
-
-                doc.autoTable({
-                    startY: 35,
-                    head: [tableColumn],
-                    body: tableRows,
-                    theme: 'striped',
-                    styles: { fontSize: 7, cellPadding: 2 },
-                    headStyles: { fontSize: 7, fillStyle: [30, 41, 59], textColor: [255, 255, 255] },
-                    foot: [['', '', '', '', '', 'TOTAL GERAL:', `R$ ${totalGeral.toFixed(2).replace('.', ',')}`]],
-                    footStyles: { fillStyle: [37, 99, 235], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
-                    columnStyles: {
-                        0: { cellWidth: 40 },
-                        1: { cellWidth: 20 },
-                        2: { cellWidth: 20 },
-                        3: { cellWidth: 20 },
-                        4: { cellWidth: 20 },
-                        5: { cellWidth: 25 },
-                        6: { cellWidth: 25 }
-                    }
-                });
-
-                // Observações
-                if (observation) {
-                    const finalY = doc.lastAutoTable.finalY + 10;
-                    doc.setFontSize(10);
-                    doc.setTextColor(40, 40, 40);
-                    doc.text("Observações:", 15, finalY);
-                    doc.setFontSize(9);
-                    doc.setTextColor(100, 100, 100);
-                    doc.text(observation, 15, finalY + 5, { maxWidth: 180 });
-                }
-
-                // Rodapé
-                const pageHeight = doc.internal.pageSize.height;
-                doc.setFontSize(10);
-                doc.setTextColor(150, 150, 150);
-                doc.text("Desenvolvedor Claudinho CSMM", 105, pageHeight - 10, { align: "center" });
-
-                doc.save(`Medicao_${period.replace('/', '_') || 'Relatorio'}.pdf`);
-            }
-
-            // Criar documento PDF
-            const doc = new jsPDF();
-            let logoProcessed = false;
-            
-            function processLogo(logoAdded) {
-                if (!logoProcessed) {
-                    logoProcessed = true;
-                    generatePDFContent(doc, logoAdded);
-                }
-            }
-
-            // Timeout de segurança: gerar PDF após 3 segundos mesmo se a imagem não carregar
-            const timeoutId = setTimeout(function() {
-                console.log('Timeout: gerando PDF sem logo');
-                processLogo(false);
-            }, 3000);
-
-            // Função para adicionar logo ao PDF
-            function addLogoToPDF(imageElement) {
-                try {
-                    // Criar canvas para processar a imagem
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Definir tamanho do canvas (15mm = aproximadamente 57 pixels a 72 DPI)
-                    const logoSize = 57;
-                    canvas.width = logoSize;
-                    canvas.height = logoSize;
-                    
-                    // Desenhar imagem no canvas redimensionada
-                    ctx.drawImage(imageElement, 0, 0, logoSize, logoSize);
-                    
-                    // Converter canvas para data URL
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    
-                    // Adicionar ao PDF (15mm = aproximadamente 57/72 * 25.4 = 20.1mm, mas vamos usar 15mm direto)
-                    doc.addImage(imgData, 'JPEG', 15, 15, 15, 15);
-                    console.log('Logo adicionado com sucesso ao PDF!');
-                    return true;
-                } catch (e) {
-                    console.error('Erro ao processar imagem no canvas:', e);
-                    // Tentar adicionar diretamente sem canvas
-                    try {
-                        doc.addImage(imageElement, 'JPEG', 15, 15, 15, 15);
-                        console.log('Logo adicionado diretamente ao PDF!');
-                        return true;
-                    } catch (e2) {
-                        console.error('Erro ao adicionar imagem diretamente:', e2);
-                        return false;
-                    }
-                }
-            }
-
-            // Tentar carregar e adicionar o logo
-            const img = new Image();
-            
-            img.onload = function() {
-                clearTimeout(timeoutId);
-                if (!logoProcessed) {
-                    const success = addLogoToPDF(img);
-                    processLogo(success);
-                }
-            };
-            
-            img.onerror = function() {
-                clearTimeout(timeoutId);
-                if (!logoProcessed) {
-                    console.log('Erro ao carregar imagem, gerando PDF sem logo');
-                    processLogo(false);
-                }
-            };
-
-            // Tentar carregar a imagem
-            try {
-                img.src = 'unnamed.jpg';
-                
-                // Se a imagem já estiver carregada (em cache), o onload pode não disparar
-                if (img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
-                    clearTimeout(timeoutId);
-                    if (!logoProcessed) {
-                        const success = addLogoToPDF(img);
-                        processLogo(success);
-                    }
-                }
-            } catch (e) {
-                clearTimeout(timeoutId);
-                console.error('Erro ao processar imagem:', e);
-                if (!logoProcessed) {
-                    processLogo(false);
-                }
-            }
-        }
-
-        // Inicializar
-        initServiceButtons();
-
-        // Registrar Service Worker para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
+                navigator.serviceWorker.register('/sw.js')
                     .then((registration) => {
-                        console.log('Service Worker registrado com sucesso:', registration.scope);
+                        console.log('Service Worker registrado:', registration.scope);
                     })
                     .catch((error) => {
-                        console.log('Falha ao registrar Service Worker:', error);
+                        console.log('Falha no registro do Service Worker:', error);
                     });
             });
         }
+        
+        // Verificar status de conexão
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connection-status');
+            if (statusElement) {
+                if (navigator.onLine) {
+                    statusElement.innerHTML = '<i class="fas fa-wifi"></i> Online';
+                    statusElement.className = 'status-online';
+                } else {
+                    statusElement.innerHTML = '<i class="fas fa-wifi"></i> Offline';
+                    statusElement.className = 'status-offline';
+                }
+            }
+        }
+        
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        updateConnectionStatus();
     </script>
 </body>
 </html>

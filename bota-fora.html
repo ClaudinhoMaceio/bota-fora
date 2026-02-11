@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Sistema de Bota Fora - M.A VIANA LOCAÇÕES</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Sistema de controle de Bota Fora com exportação de relatórios em PDF">
+    <meta name="theme-color" content="#007bff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bota Fora">
+    <meta name="msapplication-TileColor" content="#007bff">
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/gerar_icone_mv.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/gerar_icone_mv.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/gerar_icone_mv.png">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="style.css?v=4.0">
+    
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho do Sistema -->
+        <div class="header">
+            <div class="sistema-titulo">
+                <div class="logo-titulo">
+                    <div class="logo-lateral-titulo" id="logo-lateral" style="width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin: 0 auto 15px;">
+                        <img src="images/gerar_icone_mv.png" alt="Logo MV" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="80" height="80" style="display: none;">
+                            <circle cx="32" cy="32" r="30" fill="#007bff" stroke="#0056b3" stroke-width="2"/>
+                            <g fill="white">
+                                <rect x="12" y="40" width="40" height="3" rx="1.5"/>
+                                <circle cx="16" cy="42" r="2"/>
+                                <circle cx="24" cy="38" r="2"/>
+                                <circle cx="32" cy="35" r="2"/>
+                                <circle cx="40" cy="32" r="2"/>
+                                <circle cx="48" cy="30" r="2"/>
+                                <path d="M16,42 L24,38 L32,35 L40,32 L48,30" stroke="white" stroke-width="2" fill="none"/>
+                                <path d="M20,20 L20,45 L24,45 L24,28 L28,35 L32,28 L36,35 L40,28 L40,45 L44,45 L44,20 L38,20 L32,30 L26,20 Z" fill="white"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <div class="titulo-com-logo">
+                    <h1><i class="fas fa-shipping-fast"></i> BOTA FORA</h1>
+                </div>
+                <h2>M.A VIANA LOCAÇÕES E SERVIÇOS - ME</h2>
+            </div>
+            <div class="header-actions">
+                <button id="toggle-dark-mode" class="btn-dark-mode" title="Alternar modo noturno">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Informações da Empresa -->
+        <div class="empresa-info">
+            <div class="info-row">
+                <div class="info-item">
+                    <label><i class="fas fa-building"></i> <strong>CNPJ:</strong></label>
+                    <input type="text" id="cnpj-empresa" value="14.251.442/0001-15" class="campo-editavel" data-validate="cnpj" placeholder="XX.XXX.XXX/XXXX-XX">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-industry"></i> <strong>NOME DA EMPRESA:</strong></label>
+                    <input type="text" id="nome-empresa" value="M.A VIANA LOCAÇÕES E SERVIÇOS - ME" class="campo-editavel">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-map-marker-alt"></i> <strong>ENDERECO OBRA:</strong></label>
+                    <input type="text" id="endereco-obra" value="" class="campo-editavel" placeholder="Digite o endereço da obra">
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-item">
+                    <label><i class="fas fa-road"></i> <strong>Rua:</strong></label>
+                    <input type="text" id="rua-empresa" value="Rua Desembargador Auro Cerqueira Leite, 36" class="campo-editavel">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-city"></i> <strong>Cidade:</strong></label>
+                    <input type="text" id="cidade-empresa" value="Cidade Kemel - São Paulo, SP" class="campo-editavel">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-mail-bulk"></i> <strong>CEP:</strong></label>
+                    <input type="text" id="cep-empresa" value="08130-410" class="campo-editavel">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Informações do Cliente -->
+        <div class="cliente-info">
+            <div class="info-row">
+                <div class="info-item">
+                    <label><i class="fas fa-id-card"></i> <strong>CNPJ CLIENTE:</strong></label>
+                    <input type="text" id="cnpj-cliente" class="campo-editavel" placeholder="XX.XXX.XXX/XXXX-XX" data-validate="cnpj">
+                </div>
+                <div class="info-item">
+                    <label><i class="fas fa-building"></i> <strong>NOME DO CONTRATO/EMPRESA:</strong></label>
+                    <input type="text" id="nome-contrato" class="campo-editavel" placeholder="Ex: Cons Vila Romana" value="Cons Vila Romana">
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações de Bota Fora -->
+        <div class="clearance-info">
+            <h3 class="section-title"><i class="fas fa-shipping-fast"></i> Bota Fora</h3>
+            <div class="clearance-controls">
+                <button id="adicionar-clearance" class="btn-futurista" style="margin-bottom: 15px;">
+                    <i class="fas fa-plus"></i> Adicionar Data e Quantidade
+                </button>
+                <label for="upload-imagem-datas" class="btn-futurista" style="margin-bottom: 15px; margin-left: 10px; cursor: pointer; display: inline-block;">
+                    <i class="fas fa-image"></i> 📷 Reconhecer Datas de Imagem
+                </label>
+                <input type="file" id="upload-imagem-datas" accept="image/*" style="display: none;">
+            </div>
+            <div id="tabela-clearance-container" class="tabela-clearance-container">
+                <table class="tabela-clearance">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Qtd. Viagens</th>
+                            <th>Valor por Viagem</th>
+                            <th>Observação</th>
+                            <th>Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-clearance-body">
+                        <!-- Linhas serão adicionadas dinamicamente -->
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td><strong>Total Viagens</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong id="total-quantidade-clearance">R$ 0,00</strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <!-- Botões de Controle -->
+        <div class="botoes-controle">
+            <div class="botoes-grupo">
+                <button id="exportar-pdf-bota-fora" class="btn-futurista">
+                    <i class="fas fa-file-pdf"></i> 📄 Exportar PDF Bota Fora
+                </button>
+                <button id="limpar-bota-fora" class="btn-secundario">
+                    <i class="fas fa-trash"></i> 🗑️ Limpar Dados
+                </button>
+            </div>
+        </div>
+
+        <!-- Resumo Final -->
+        <div class="resumo-final">
+            <div class="resumo-item">
+                <h4><i class="fas fa-chart-bar"></i> RESUMO</h4>
+                <p><strong>Total de Registros:</strong> <span id="total-registros">0</span></p>
+                <p><strong>Total de Viagens:</strong> <span id="total-viagens-resumo">0</span></p>
+                <p><strong>Total em Valores:</strong> <span id="total-quantidade-resumo">R$ 0,00</span></p>
+            </div>
+        </div>
+
+        <!-- Observação -->
+        <div class="observacao-section">
+            <h4><i class="fas fa-comment-alt"></i> Observação</h4>
+            <textarea id="observacao" class="campo-editavel" rows="3" placeholder="Digite observações adicionais aqui..."></textarea>
+        </div>
+
+        <!-- Rodapé -->
+        <div class="rodape">
+            <p><i class="fas fa-map-marker-alt"></i> SÃO PAULO, <span id="data-footer"></span> / 2025</p>
+            <p class="sistema-info">Sistema de Bota Fora - M.A VIANA LOCAÇÕES E SERVIÇOS - ME</p>
+            <p class="versao">Versão 1.0 - Sistema Profissional e Funcional</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4.1.1/dist/tesseract.min.js"></script>
+    <script src="config.js"></script>
+    <script src="bota-fora.js?v=2.0"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registrado:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Falha no registro do Service Worker:', error);
+                    });
+            });
+        }
+        
+        // Verificar status de conexão
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connection-status');
+            if (statusElement) {
+                if (navigator.onLine) {
+                    statusElement.innerHTML = '<i class="fas fa-wifi"></i> Online';
+                    statusElement.className = 'status-online';
+                } else {
+                    statusElement.innerHTML = '<i class="fas fa-wifi"></i> Offline';
+                    statusElement.className = 'status-offline';
+                }
+            }
+        }
+        
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        updateConnectionStatus();
+    </script>
+</body>
+</html>
